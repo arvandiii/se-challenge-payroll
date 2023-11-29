@@ -1,0 +1,21 @@
+version: "2"
+
+services:
+  mongo:
+    container_name: mongo
+    image: mongo:latest
+    volumes:
+      - ./data/mongo:/data/db
+  redis:
+    container_name: redis
+    image: redis:latest
+    volumes:
+      - ./data/redis:/data
+  manager:
+    build: ./backend
+    container_name: backend
+    ports:
+      - 3000:3000
+    depends_on:
+      - mongo
+      - redis
