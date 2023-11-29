@@ -10,4 +10,6 @@ COPY . .
 
 EXPOSE $PORT
 
+RUN npm run test
+
 CMD ["pm2-runtime", "start", "./src/app.js"]
