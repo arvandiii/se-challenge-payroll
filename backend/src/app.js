@@ -4,11 +4,13 @@ const port = process.env.PORT
 const multer = require('multer')
 const parseReportCSV = require('./utils/parseReportCSV')
 const saveReport = require('./utils/saveReport')
+const getReport = require('./utils/getReport')
 
 const upload = multer({ dest: './tmp/' })
 
-app.get('/report', (req, res) => {
-    res.send({ response: 'up' })
+app.get('/report', async (req, res) => {
+    const employeeReports = await getReport();
+    res.send({ payrollReport: {employeeReports} })
 })
 
 app.post('/upload/report', upload.single('reportFile'), async function (req, res, next) {

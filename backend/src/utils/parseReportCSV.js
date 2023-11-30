@@ -1,10 +1,18 @@
 const csv = require('csvtojson')
+const _ = require('underscore')
 
 const headerSchema = {
     'date': 'string',
-    'hours worked': 'number', 
+    'hours worked': 'number',
     'employee id': 'string',
     'job group': 'string'
+}
+
+const headerMap = {
+    'date': 'date',
+    'hours worked': 'hoursWorked',
+    'employee id': 'employeeId',
+    'job group': 'jobGroup'
 }
 
 const checkType = (arr, schema) => {
@@ -35,7 +43,15 @@ const parseReportCSV = async ({ csvFile }) => {
     if (!checkType(reportArr, headerSchema)) {
         throw new Error('Invalid CSV')
     }
-    return reportArr
+    const mappedReportArr = _.map(reportArr,
+        (item) => {
+            const mappedItem = {}
+            for (const key in item) {
+                mappedItem[headerMap[key]] = item[key]
+            }
+            return mappedItem
+        })
+    return mappedReportArr
 }
 
 module.exports = parseReportCSV
