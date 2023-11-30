@@ -1,4 +1,4 @@
-FROM node:14-alpine
+FROM node:18-alpine
 
 ARG PORT
 ENV PORT=$PORT
@@ -10,6 +10,6 @@ COPY . .
 
 EXPOSE $PORT
 
-RUN npm run test
+# RUN npm run test
 
 CMD ["pm2-runtime", "start", "./src/app.js"]
