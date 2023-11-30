@@ -7,9 +7,13 @@ To run the backend of the application, you'll need to:
 1. If you haven't already, install Docker and Docker-compose on your system.
 2. Create a .env file in the project root that contains `PORT=[Here should be the port you want]`
 2. For running the tests you can use docker-compose with the following instruction:
-`docker-compose -f docker-compose.yml -f docker-compose.test.yml up`
+```
+docker-compose -f docker-compose.yml -f docker-compose.test.yml up
+```
 3. For running the backend as a service you can run the following command:
-`docker-compose up`
+```
+docker-compose up
+```
 
 ## APIs
 ### The API for uploading a new CSV file
