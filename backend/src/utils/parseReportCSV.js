@@ -15,40 +15,27 @@ const headerMap = {
     'job group': 'jobGroup'
 }
 
-const checkType = (arr, schema) => {
-    if (!Array.isArray(arr) || arr.length === 0) {
-        return false;
-    }
+function convertToCleanDate(dateString) {
+    const parts = dateString.split('/');
+    const day = parts[0].padStart(2, '0');
+    const month = parts[1].padStart(2, '0');
+    const year = parts[2];
+    return `${day}/${month}/${year}`;
+}
 
-    for (const obj of arr) {
-        if (typeof obj !== 'object' || Array.isArray(obj)) {
-            return false;
-        }
-
-        for (const key in schema) {
-            if (!(key in obj) || typeof obj[key] !== schema[key]) {
-                return false;
-            }
-        }
-    }
-    return true;
-};
-
-const parseReportCSV = async ({ csvFile }) => {
+const parseReportCSV = async ({ reportCSVFilePath }) => {
     const reportArr = await csv({
         colParser: headerSchema,
         checkType: true,
         noheader: false
-    }).fromFile(csvFile)
-    if (!checkType(reportArr, headerSchema)) {
-        throw new Error('Invalid CSV')
-    }
+    }).fromFile(reportCSVFilePath)
     const mappedReportArr = _.map(reportArr,
         (item) => {
             const mappedItem = {}
             for (const key in item) {
                 mappedItem[headerMap[key]] = item[key]
             }
+            mappedItem.date = convertToCleanDate(mappedItem.date)
             return mappedItem
         })
     return mappedReportArr

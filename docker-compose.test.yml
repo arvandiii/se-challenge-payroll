@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  backend:
+    environment:
+      - PORT=${PORT}
+      - ENV=test
+    command: npm run test
+  mongo:
+    volumes: []

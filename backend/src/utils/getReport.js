@@ -4,7 +4,7 @@ const ReportItem = require('../models/ReportItem');
 function convertToDate(dateString) {
     const parts = dateString.split('/');
     const day = parseInt(parts[0], 10);
-    const month = parseInt(parts[1], 10) - 1; // JavaScript months are 0-indexed
+    const month = parseInt(parts[1], 10) - 1;
     const year = parseInt(parts[2], 10);
 
     return new Date(year, month, day);
@@ -27,25 +27,22 @@ const calculateAmountPaid = (hoursWorked, jobGroup) => {
 }
 
 const getReport = async () => {
-    const reportItems = await ReportItem.find({});
-    console.log('inja', reportItems);
-    const mapedReportItems = reportItems.map((item) => ({
+    const reportItems = await ReportItem.find({}, null, { sort: { employeeId: 1, date: 1 } });
+    console.log(reportItems)
+    const reportItemsWithPayPeriod = reportItems.map((item) => ({
         employeeId: item.employeeId,
         hoursWorked: item.hoursWorked,
         jobGroup: item.jobGroup,
         payPeriod: calculatePayPeriod(convertToDate(item.date)),
     }))
-    console.log('inja 1', mapedReportItems);
-    const groupedReportItems = _.groupBy(mapedReportItems,
+    const groupedReport = _.groupBy(reportItemsWithPayPeriod,
         (item) => `${item.employeeId}-${item.payPeriod.startDate}-${item.payPeriod.endDate}`);
-    console.log('inja 2', groupedReportItems);
-    const mapedGroupedReportItems = _.map(groupedReportItems, (group) => ({
+    const groupedReportWithAmountPaid = _.map(groupedReport, (group) => ({
         employeeId: group[0].employeeId,
         payPeriod: group[0].payPeriod,
-        amountPaid: group.reduce((acc, item) => acc + calculateAmountPaid(item.hoursWorked, item.jobGroup), 0)
+        amountPaid: `$${group.reduce((acc, item) => acc + calculateAmountPaid(item.hoursWorked, item.jobGroup), 0).toFixed(2)}`
     }));
-    console.log('inja 3', mapedGroupedReportItems);
-    return mapedGroupedReportItems;
+    return groupedReportWithAmountPaid;
 }
 
 module.exports = getReport;
