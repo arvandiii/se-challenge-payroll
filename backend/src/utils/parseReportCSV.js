@@ -15,12 +15,13 @@ const headerMap = {
     'job group': 'jobGroup'
 }
 
-function convertToCleanDate(dateString) {
+function convertToDate(dateString) {
     const parts = dateString.split('/');
-    const day = parts[0].padStart(2, '0');
-    const month = parts[1].padStart(2, '0');
-    const year = parts[2];
-    return `${day}/${month}/${year}`;
+    const day = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10) - 1;
+    const year = parseInt(parts[2], 10);
+
+    return new Date(year, month, day);
 }
 
 const parseReportCSV = async ({ reportCSVFilePath }) => {
@@ -35,7 +36,7 @@ const parseReportCSV = async ({ reportCSVFilePath }) => {
             for (const key in item) {
                 mappedItem[headerMap[key]] = item[key]
             }
-            mappedItem.date = convertToCleanDate(mappedItem.date)
+            mappedItem.date = convertToDate(mappedItem.date).getTime()
             return mappedItem
         })
     return mappedReportArr

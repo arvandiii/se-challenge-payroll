@@ -1,7 +1,7 @@
 const { mongoose } = require('./mongo');
 
 const ReportItemSchema = new mongoose.Schema({
-    'date': String,
+    'date': Number,
     'hoursWorked': Number,
     'employeeId': String,
     'jobGroup': String,

@@ -1,15 +1,6 @@
 const _ = require('underscore');
 const ReportItem = require('../models/ReportItem');
 
-function convertToDate(dateString) {
-    const parts = dateString.split('/');
-    const day = parseInt(parts[0], 10);
-    const month = parseInt(parts[1], 10) - 1;
-    const year = parseInt(parts[2], 10);
-
-    return new Date(year, month, day);
-}
-
 const calculatePayPeriod = (date) => {
     const year = date.getFullYear();
     const month = date.getMonth();
@@ -33,7 +24,7 @@ const getReport = async () => {
         employeeId: item.employeeId,
         hoursWorked: item.hoursWorked,
         jobGroup: item.jobGroup,
-        payPeriod: calculatePayPeriod(convertToDate(item.date)),
+        payPeriod: calculatePayPeriod(new Date(item.date)),
     }))
     const groupedReport = _.groupBy(reportItemsWithPayPeriod,
         (item) => `${item.employeeId}-${item.payPeriod.startDate}-${item.payPeriod.endDate}`);
