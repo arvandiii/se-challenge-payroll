@@ -6,11 +6,6 @@ services:
     image: mongo:latest
     volumes:
       - ./data/mongo:/data/db
-  redis:
-    container_name: redis
-    image: redis:latest
-    volumes:
-      - ./data/redis:/data
   backend:
     build: ./backend
     container_name: backend
