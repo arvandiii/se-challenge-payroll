@@ -1,12 +1,16 @@
 const Report = require('../src/models/Report');
 const ReportItem = require('../src/models/ReportItem');
-const saveReport = require('../src/utils/saveReport');
-const getReport = require('../src/utils/getReport');
+const JobGroup = require('../src/models/JobGroup');
+const saveReport = require('../src/controllers/saveReport');
+const getReport = require('../src/controllers/getReport');
 
 describe('get scenario', () => {
     beforeEach(async () => {
         await Report.deleteMany({});
         await ReportItem.deleteMany({});
+        await JobGroup.deleteMany({});
+        await JobGroup.findOneAndUpdate({ group: 'A', currency: 'USD'}, { rate: 20 }, { upsert: true });
+        await JobGroup.findOneAndUpdate({ group: 'B', currency: 'USD'}, { rate: 30 }, { upsert: true });
     });
 
     test('get report after csv 1', async () => {

@@ -1,11 +1,13 @@
+const Promise = require('bluebird');
 const Report = require('../models/Report');
 const ReportItem = require('../models/ReportItem');
-const parseReportCSV = require("./parseReportCSV");
+const parseReportCSV = require("../utils/parseReportCSV");
+const reportErrors = require('../errors/report');
 
 const saveReport = async ({ reportId, reportCSVFilePath }) => {
     const exists = await Report.exists({ id: reportId });
     if (exists) {
-        throw new Error('Report already exists');
+        throw reportErrors.REPORT_EXISTS;
     }
 
     const reportItemsData = await parseReportCSV({ reportCSVFilePath });
