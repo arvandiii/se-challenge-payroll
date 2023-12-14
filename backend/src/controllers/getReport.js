@@ -10,6 +10,7 @@ const calculateAmountPaid = async (hoursWorked, jobGroup, currency) => {
     return hoursWorked * jobGroupFromDB.rate;
 }
 
+// TODO: add redis cache
 const getReport = async () => {
     // TODO: change default to an option
     const currency = 'USD'

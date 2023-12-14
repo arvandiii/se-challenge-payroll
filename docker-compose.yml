@@ -1,6 +1,11 @@
 version: '3'
 
 services:
+  redis:
+    container_name: redis
+    image: redis:latest
+    volumes:
+      - ./data/redis:/data
   mongo:
     container_name: mongo
     image: mongo:latest
@@ -13,6 +18,7 @@ services:
       - ${PORT}:${PORT}
     depends_on:
       - mongo
+      - redis
     environment:
       - PORT=${PORT}
       - ENV=production

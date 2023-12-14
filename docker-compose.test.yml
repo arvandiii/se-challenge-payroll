@@ -8,3 +8,5 @@ services:
     command: npm run test
   mongo:
     volumes: []
+  redis:
+    volumes: []
